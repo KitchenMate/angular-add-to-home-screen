@@ -11,9 +11,15 @@ angular.module('angularAddToHomeScreen', [])
   });
 
 'use strict';
+UAParser = require('ua-parser-js')
 
 angular.module('angularAddToHomeScreen')
   .directive('ngAddToHomeScreen', ['$homeScreenDetector', 'aathsLocales', function($homeScreenDetector, aathsLocales){
+    localDate = localStorage.getItem('onDismiss')
+    if(localDate && moment().diff(localDate, 'days') < 30) {
+      return
+    }
+
     var hydrateInstructions = function (hsdInstance) {
       var device = hsdInstance.device() || 'device';
       var instructions;
@@ -60,6 +66,11 @@ angular.module('angularAddToHomeScreen')
       // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
       link: function($scope, iElm) {
         $scope.aathsClose = function () {
+          currentDate = moment()
+          localDate = localStorage.getItem('onDismiss')
+          if(!localDate || currentDate.diff(localDate, 'days') > 30) {
+            localStorage.setItem('onDismiss', currentDate)
+          }
           iElm.remove();
           if(angular.isFunction($scope.closeCallback)) {
             $scope.closeCallback();
@@ -80,7 +91,7 @@ angular.module('angularAddToHomeScreen')
   }]);
 
 'use strict';
-UAParser = require('ua-parser-js')
+
 /**
  *
  */
