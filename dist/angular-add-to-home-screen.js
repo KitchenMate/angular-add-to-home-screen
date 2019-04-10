@@ -80,7 +80,7 @@ angular.module('angularAddToHomeScreen')
   }]);
 
 'use strict';
-
+UAParser = require('ua-parser-js')
 /**
  *
  */
