@@ -41,7 +41,7 @@ angular.module('angularAddToHomeScreen')
       // priority: 1,
       // terminal: true,
       scope: {
-        closeCallback: '=closeCallback'
+        closeCallback: '=closeCallback',
         openCallback: '=openCallback'
       }, // {} = isolate, true = child, false/undefined = no change
       // controller: function($scope, $element, $attrs, $transclude) {},

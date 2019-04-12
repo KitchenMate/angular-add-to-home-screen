@@ -11,11 +11,10 @@ angular.module('angularAddToHomeScreen', [])
   });
 
 'use strict';
-UAParser = require('ua-parser-js')
 
 angular.module('angularAddToHomeScreen')
   .directive('ngAddToHomeScreen', ['$homeScreenDetector', 'aathsLocales', function($homeScreenDetector, aathsLocales){
-    localDate = localStorage.getItem('onDismiss')
+    localDate = localStorage.getItem('homescreen.notification.onDismiss')
     if(localDate && moment().diff(localDate, 'days') < 30) {
       return
     }
@@ -54,7 +53,8 @@ angular.module('angularAddToHomeScreen')
       // priority: 1,
       // terminal: true,
       scope: {
-        closeCallback: '=closeCallback'
+        closeCallback: '=closeCallback',
+        openCallback: '=openCallback'
       }, // {} = isolate, true = child, false/undefined = no change
       // controller: function($scope, $element, $attrs, $transclude) {},
       // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
@@ -65,11 +65,12 @@ angular.module('angularAddToHomeScreen')
       transclude: true,
       // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
       link: function($scope, iElm) {
+        $scope.openCallback();
         $scope.aathsClose = function () {
           currentDate = moment()
-          localDate = localStorage.getItem('onDismiss')
+          localDate = localStorage.getItem('homescreen.notification.onDismiss')
           if(!localDate || currentDate.diff(localDate, 'days') > 30) {
-            localStorage.setItem('onDismiss', currentDate)
+            localStorage.setItem('homescreen.notification.onDismiss', currentDate)
           }
           iElm.remove();
           if(angular.isFunction($scope.closeCallback)) {
@@ -91,7 +92,7 @@ angular.module('angularAddToHomeScreen')
   }]);
 
 'use strict';
-
+UAParser = require('ua-parser-js')
 /**
  *
  */
@@ -119,7 +120,6 @@ angular.module('angularAddToHomeScreen')
     Detector.prototype.iOS12 = function () {
       return this.result.os.name === 'iOS' && getMajorVersion(this.result.os.version) === '12';
     };
-
 
     Detector.prototype.iOS11 = function () {
       return this.result.os.name === 'iOS' && getMajorVersion(this.result.os.version) === '11';
