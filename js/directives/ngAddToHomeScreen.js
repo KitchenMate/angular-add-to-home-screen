@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('angularAddToHomeScreen')
-  .directive('ngAddToHomeScreen', ['$homeScreenDetector', 'aathsLocales', function($homeScreenDetector, aathsLocales){
-    localDate = localStorage.getItem('homescreen.notification.onDismiss')
-    if(localDate && moment().diff(localDate, 'days') < 30) {
-      return
+  .directive('ngAddToHomeScreen', ['$homeScreenDetector', '$homeScreenCookie', 'aathsLocales', function($homeScreenDetector, $homeScreenCookie, aathsLocales){
+
+    if ($homeScreenCookie.isDismissed()) {
+      return {};
     }
 
     var hydrateInstructions = function (hsdInstance) {
@@ -55,11 +55,7 @@ angular.module('angularAddToHomeScreen')
       link: function($scope, iElm) {
         $scope.openCallback();
         $scope.aathsClose = function () {
-          currentDate = moment()
-          localDate = localStorage.getItem('homescreen.notification.onDismiss')
-          if(!localDate || currentDate.diff(localDate, 'days') > 30) {
-            localStorage.setItem('homescreen.notification.onDismiss', currentDate)
-          }
+          $homeScreenCookie.dismiss();
           iElm.remove();
           if(angular.isFunction($scope.closeCallback)) {
             $scope.closeCallback();
