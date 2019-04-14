@@ -1,6 +1,6 @@
 {
   "name": "@kitchenmate/add-to-home-screen",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "An AngularJS directive to display an \"add to homescreen\" dialog for iOS 7 and iOS 6",
   "main": "dist/angular-add-to-home-screen.js",
   "directories": {
